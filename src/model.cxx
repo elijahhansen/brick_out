@@ -46,7 +46,7 @@ Model::Model(Game_config const& config)
 {
     // TODO: your code here
 }
-
+//gg
 // Freebie.
 void
 Model::launch()
