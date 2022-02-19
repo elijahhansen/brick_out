@@ -44,7 +44,22 @@ Model::Model(Game_config const& config)
           ball(paddle, config),
           random_boost_source(-config.max_boost, config.max_boost)
 {
-    // TODO: your code here
+      for (int i = 0; i<config.brick_rows; i++)
+    {
+          for (int j = 0; j<config.brick_cols; j++)
+          {
+              int x_offset = config.brick_spacing.width +
+                      config.brick_dims().width;
+              int y_offset = config.brick_spacing.height +
+                      config.brick_dims().height;
+             Block block = Block::from_top_left(
+                                        {config.side_margin+j*x_offset,
+                                         config.top_margin+i*y_offset},
+                                                config.brick_dims());
+             bricks.push_back(block);
+          }
+
+    }
 }
 //gg
 // Freebie.
@@ -70,7 +85,11 @@ Model::launch()
 void
 Model::paddle_to(int x)
 {
-    // TODO: your code here
+    paddle.x = x;
+    if (!ball.live)
+    {
+        ball = Ball(paddle,config);
+    }
 }
 
 // The description in model.hxx is pretty detailed. What I will add here:
@@ -80,5 +99,43 @@ Model::paddle_to(int x)
 void
 Model::on_frame(double dt)
 {
-    // TODO: your code here
+    //Game_config const& config_new = Model::config;
+
+    if (ball.live)
+    {
+        ball = ball.next(dt);
+        if (ball.hits_bottom(config))
+        {
+            ball.live = false;
+            ball = Ball(paddle,config);
+            return;
+        }
+        else if(ball.hits_side(config) && ball.hits_top(config))
+        {
+            ball.velocity*= -1;
+        }
+        else if(ball.hits_side(config) && !ball.hits_top(config))
+        {
+            ball.velocity.width *= -1;
+        }
+        else if(ball.hits_top(config) && !ball.hits_side(config))
+
+        {
+            ball.velocity.height *= -1;
+        }
+        else if(ball.hits_block(paddle))
+        {
+            ball.velocity.height *= -1;
+        }
+        else if (ball.destroy_brick(bricks))
+        {
+            ball.velocity.height *= -1;
+            ball.velocity.width += random_boost_source();
+            random_boost_source.next();
+        }
+
+        ball  = ball.next(dt);
+
+
+    }
 }
