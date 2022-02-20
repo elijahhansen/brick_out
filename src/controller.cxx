@@ -23,7 +23,10 @@ Controller::on_key(ge211::Key key)
         quit();
     }
 
-        // TODO: your code here
+    if (key == ge211::Key::code(' '))
+    {
+        model.launch();
+    }
 }
 
 // Makes the ball live via `Model::launch()`.
@@ -33,7 +36,7 @@ Controller::on_key(ge211::Key key)
 void
 Controller::on_mouse_up(ge211::Mouse_button, ge211::Posn<int>)
 {
-    // TODO: your code here
+   model.launch();
 }
 
 // Informs the model of the mouse position (and thus the desired paddle
@@ -43,7 +46,7 @@ Controller::on_mouse_up(ge211::Mouse_button, ge211::Posn<int>)
 void
 Controller::on_mouse_move(ge211::Posn<int> position)
 {
-    // TODO: your code here
+    model.paddle_to(position.x);
 }
 
 

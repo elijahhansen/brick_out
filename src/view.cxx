@@ -38,7 +38,15 @@ View::View(Model const& m)
 void
 View::draw(ge211::Sprite_set& sprites)
 {
-    // TODO: your code here
+   sprites.add_sprite(ball_sprite, (ge211::geometry::Posn<int>)model.ball
+   .top_left());
+   sprites.add_sprite(paddle_sprite, model.paddle.top_left());
+   for (Block block : model.bricks)
+   {
+       sprites.add_sprite(brick_sprite, block.top_left());
+   }
+
+
 }
 
 ge211::Dims<int>

@@ -112,8 +112,9 @@ bool
 Ball::hits_block(Block const& block) const
 {
     if (Ball::center.x + radius < block.x || Ball::center.x + radius > block
-    .x + block.width || Ball::center.y + radius < block.y || Ball::center.y
-    +radius > block.y + block.width)
+    .x + block.width || Ball::center.y + radius < block.y ||
+    Ball::center.y
+    +radius > block.y + block.height)
     {
         return false;
 
@@ -164,7 +165,7 @@ Ball::destroy_brick(std::vector<Block>& bricks) const
     {
         if (hits_block(bricks[i]))
         {
-            bricks[i] = bricks[bricks.size() - 1];
+            bricks[i] = bricks.back();
             bricks.pop_back();
             return true;
         }

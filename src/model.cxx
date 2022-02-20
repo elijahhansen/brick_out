@@ -53,8 +53,8 @@ Model::Model(Game_config const& config)
               int y_offset = config.brick_spacing.height +
                       config.brick_dims().height;
              Block block = Block::from_top_left(
-                                        {config.side_margin+j*x_offset,
-                                         config.top_margin+i*y_offset},
+                                        {config.side_margin+(j*x_offset),
+                                         config.top_margin+(i*y_offset)},
                                                 config.brick_dims());
              bricks.push_back(block);
           }
@@ -103,34 +103,34 @@ Model::on_frame(double dt)
 
     if (ball.live)
     {
-        ball = ball.next(dt);
-        if (ball.hits_bottom(config))
+       Ball b = ball.next(dt);
+        if (b.hits_bottom(config))
         {
             ball.live = false;
             ball = Ball(paddle,config);
             return;
         }
-        else if(ball.hits_side(config) && ball.hits_top(config))
+        if(b.hits_side(config) && b.hits_top(config))
         {
-            ball.velocity*= -1;
+            ball.velocity *= -1;
         }
-        else if(ball.hits_side(config) && !ball.hits_top(config))
+        if(b.hits_side(config) && !b.hits_top(config))
         {
             ball.velocity.width *= -1;
         }
-        else if(ball.hits_top(config) && !ball.hits_side(config))
+        if(b.hits_top(config) && !b.hits_side(config))
 
         {
             ball.velocity.height *= -1;
         }
-        else if(ball.hits_block(paddle))
+        if(b.hits_block(paddle))
         {
             ball.velocity.height *= -1;
         }
-        else if (ball.destroy_brick(bricks))
+        if (b.destroy_brick(bricks))
         {
             ball.velocity.height *= -1;
-            ball.velocity.width += random_boost_source();
+            ball.velocity.width += Model::random_boost_source();
             random_boost_source.next();
         }
 
