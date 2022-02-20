@@ -138,6 +138,9 @@ TEST_CASE("bounce off paddle")
     for (int i = 0; i < 8; ++i) {
         check_frame();
     }
+    for (int i = 0; i < 10; ++i) {
+        check_frame();
+    }
 }
 
 //
